@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiveTranslator 2.0 - Tradução em Tempo Real</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animação de Scroll (Substitui o FadeIn do React) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Utilitários de atraso para animação */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+
+        /* Cursor piscando */
+        .cursor-blink {
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="selection:bg-indigo-500 selection:text-white">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i data-lucide="sparkles" class="w-5 h-5 text-indigo-500"></i>
+                <span class="font-semibold tracking-tight text-lg">LiveTranslator</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-neutral-400">
+                <a href="#features" class="hover:text-white transition-colors">Funcionalidades</a>
+                <a href="#gallery" class="hover:text-white transition-colors">Galeria</a>
+                <a href="#specs" class="hover:text-white transition-colors">Especificações</a>
+            </div>
+            <button class="bg-white text-black px-4 py-1.5 rounded-full text-xs font-bold hover:bg-neutral-200 transition-colors">
+                Baixar v2.0
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 px-6 flex flex-col items-center text-center overflow-hidden">
+        <!-- Glow de fundo -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div class="reveal">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-xs font-bold mb-6">
+                <i data-lucide="zap" class="w-3 h-3 fill-current"></i> NOVO: LATÊNCIA ZERO
+            </div>
+        </div>
+        
+        <div class="reveal delay-100">
+            <h1 class="text-5xl md:text-8xl font-bold tracking-tighter mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-500">
+                Você escreve.<br/> Ele traduz. <span class="text-indigo-500">Agora.</span>
+            </h1>
+        </div>
+
+        <div class="reveal delay-200">
+            <p class="text-lg md:text-2xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-10">
+                A única ferramenta de tradução projetada para fluxo de pensamento contínuo. Sem botões de "Traduzir". Sem espera.
+            </p>
+        </div>
+
+        <div class="reveal delay-300">
+            <div class="flex flex-col md:flex-row gap-4 justify-center items-center mb-16">
+                <button class="px-8 py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium transition-all transform hover:scale-105 shadow-[0_0_20px_-5px_rgba(79,70,229,0.5)]">
+                    Começar Grátis
+                </button>
+                <button class="flex items-center gap-2 px-8 py-3 rounded-full border border-neutral-700 hover:border-neutral-500 text-neutral-300 font-medium transition-all">
+                    <i data-lucide="play" class="w-4 h-4 fill-current"></i> Ver demonstração
+                </button>
+            </div>
+        </div>
+
+        <!-- LIVE DEMO CONTAINER -->
+        <div class="reveal delay-400 w-full px-4 max-w-4xl mx-auto">
+            <div class="relative mx-auto border-neutral-800 bg-neutral-900/90 border-[8px] rounded-[1.5rem] md:rounded-[2.5rem] w-full shadow-2xl flex flex-col overflow-hidden backdrop-blur-xl h-[300px] md:h-[450px]">
+                <!-- Header Mockup -->
+                <div class="h-10 md:h-12 border-b border-white/5 bg-neutral-900 flex items-center px-4 md:px-6 gap-2 justify-between">
+                    <div class="flex gap-2">
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <div class="text-[10px] text-neutral-600 font-mono">LiveTranslator v2.0</div>
+                </div>
+                
+                <!-- Body Mockup -->
+                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-white/5">
+                    <!-- Input Area -->
+                    <div class="p-6 md:p-8 flex flex-col relative text-left">
+                        <div class="flex justify-between mb-4">
+                            <div class="text-[10px] md:text-xs font-bold text-neutral-500 tracking-wider">PORTUGUÊS</div>
+                        </div>
+                        <div class="text-xl md:text-3xl font-medium text-neutral-200 font-sans leading-relaxed">
+                            <span id="demo-input"></span><span class="w-1 h-6 md:h-8 inline-block bg-indigo-500 ml-1 cursor-blink align-middle"></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Output Area -->
+                    <div class="p-6 md:p-8 flex flex-col bg-indigo-900/5 relative text-left">
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="text-[10px] md:text-xs font-bold text-indigo-400 tracking-wider">INGLÊS</div>
+                            <div class="flex items-center gap-1 text-[10px] text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-full">
+                                <i data-lucide="zap" class="w-3 h-3 fill-current"></i> Tempo Real
+                            </div>
+                        </div>
+                        <div class="text-xl md:text-3xl font-medium text-indigo-200 font-sans leading-relaxed">
+                            <span id="demo-output" class="min-h-[1.5em] block"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-4 text-xs text-neutral-600 uppercase tracking-widest">
+                * Interface real do programa capturada em tempo real
+            </p>
+        </div>
+    </section>
+
+    <!-- GALLERY SECTION -->
+    <section id="gallery" class="py-24 bg-neutral-900 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="reveal text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Disponível em qualquer lugar</h2>
+                <p class="text-neutral-400 max-w-2xl mx-auto text-lg">
+                    Comece a traduzir no seu escritório e continue no caminho. Sincronização segura, preferências salvas e desempenho nativo em cada dispositivo.
+                </p>
+            </div>
+
+            <div class="flex flex-col md:flex-row justify-center gap-8 md:gap-16 items-start">
+                
+                <!-- Laptop View Block -->
+                <div class="reveal delay-100 flex flex-col gap-8 w-full max-w-xl group">
+                    <div class="relative bg-neutral-800 rounded-xl p-2 shadow-2xl border border-neutral-700 transform group-hover:-translate-y-2 transition-transform duration-500">
+                        <div class="bg-slate-50 rounded-lg overflow-hidden aspect-[16/10] relative flex flex-col border border-white/5">
+                            <!-- App Header -->
+                            <div class="h-10 bg-white border-b border-slate-200 flex items-center px-4 justify-between">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded bg-indigo-500/10 flex items-center justify-center border border-indigo-100">
+                                        <i data-lucide="sparkles" class="w-3 h-3 text-indigo-600"></i>
+                                    </div>
+                                    <div class="w-20 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full opacity-80"></div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <div class="w-6 h-6 rounded-full border border-slate-200"></div>
+                                    <div class="w-6 h-6 rounded-full border border-slate-200"></div>
+                                </div>
+                            </div>
+                            <!-- App Body -->
+                            <div class="flex-1 bg-slate-50 p-4 grid grid-cols-2 gap-4">
+                                <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm flex flex-col">
+                                    <div class="flex justify-between mb-3">
+                                        <div class="w-16 h-2 bg-slate-300 rounded"></div>
+                                        <div class="flex gap-1"><div class="w-4 h-4 bg-slate-100 rounded-full"></div></div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <div class="w-full h-2 bg-slate-800 rounded opacity-60"></div>
+                                        <div class="w-3/4 h-2 bg-slate-800 rounded opacity-60"></div>
+                                        <div class="w-5/6 h-2 bg-slate-800 rounded opacity-60"></div>
+                                    </div>
+                                </div>
+                                <div class="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm flex flex-col relative overflow-hidden">
+                                    <div class="absolute inset-0 bg-indigo-50/40"></div>
+                                    <div class="flex justify-between mb-3 relative z-10">
+                                        <div class="w-16 h-2 bg-indigo-300 rounded"></div>
+                                        <div class="flex gap-1"><div class="w-4 h-4 bg-white/50 rounded-full"></div></div>
+                                    </div>
+                                    <div class="space-y-2 relative z-10">
+                                        <div class="w-full h-2 bg-indigo-500 rounded opacity-60"></div>
+                                        <div class="w-3/4 h-2 bg-indigo-500 rounded opacity-60"></div>
+                                        <div class="w-4/5 h-2 bg-indigo-500 rounded opacity-60"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Desktop Info -->
+                    <div class="px-2">
+                        <h3 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                            <i data-lucide="monitor" class="w-6 h-6 text-indigo-500"></i> Web & Desktop
+                        </h3>
+                        <p class="text-neutral-500 mb-6">A experiência completa para produtividade máxima. Ideal para reuniões, relatórios e textos longos.</p>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="keyboard" class="w-4 h-4 text-indigo-400"></i></div>
+                                Atalhos de Teclado
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="file-text" class="w-4 h-4 text-indigo-400"></i></div>
+                                Exportação PDF/Docx
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="mic" class="w-4 h-4 text-indigo-400"></i></div>
+                                Ditado de Longa Duração
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i></div>
+                                Múltiplas Abas
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 opacity-60">
+                            <span class="px-3 py-1 bg-white/5 rounded-md text-xs font-mono border border-white/10">macOS</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-md text-xs font-mono border border-white/10">Windows</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-md text-xs font-mono border border-white/10">Web</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile View Block -->
+                <div class="reveal delay-200 flex flex-col gap-8 w-full max-w-sm group">
+                    <div class="relative bg-neutral-900 rounded-[3rem] p-3 shadow-2xl border-4 border-neutral-800 w-[280px] h-[580px] transform group-hover:-translate-y-2 transition-transform duration-500 mx-auto">
+                        <div class="bg-slate-50 rounded-[2.5rem] overflow-hidden w-full h-full relative border border-black/10 flex flex-col">
+                            <!-- Notch -->
+                            <div class="absolute top-0 w-full h-7 bg-black z-20 flex justify-center">
+                                <div class="w-32 h-5 bg-black rounded-b-xl"></div>
+                            </div>
+                            <!-- Mobile Content -->
+                            <div class="mt-8 px-5 flex justify-between items-center mb-4 pt-2">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center">
+                                        <i data-lucide="sparkles" class="w-4 h-4 text-indigo-500"></i>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        <div class="w-24 h-2.5 bg-gradient-to-r from-indigo-500 to-purple-500 rounded"></div>
+                                    </div>
+                                </div>
+                                <div class="w-8 h-8 rounded-full bg-slate-200"></div>
+                            </div>
+                            <div class="flex-1 px-4 flex flex-col gap-3 pb-6">
+                                <div class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex-1 flex flex-col">
+                                    <div class="flex justify-between mb-3"><div class="w-16 h-2 bg-slate-300 rounded"></div></div>
+                                    <div class="space-y-3">
+                                        <div class="w-full h-2.5 bg-slate-700 rounded opacity-40"></div>
+                                        <div class="w-5/6 h-2.5 bg-slate-700 rounded opacity-40"></div>
+                                        <div class="w-full h-2.5 bg-slate-700 rounded opacity-40"></div>
+                                    </div>
+                                </div>
+                                <div class="self-center -my-3 z-10 bg-white p-2 rounded-full shadow-md border border-slate-100 text-slate-300">
+                                    <i data-lucide="arrow-right" class="w-4 h-4 rotate-90"></i>
+                                </div>
+                                <div class="bg-white rounded-3xl p-5 shadow-sm border border-indigo-50 flex-1 relative overflow-hidden flex flex-col">
+                                    <div class="absolute inset-0 bg-indigo-50/60"></div>
+                                    <div class="flex justify-between mb-3 relative z-10">
+                                        <div class="w-16 h-2 bg-indigo-300 rounded"></div>
+                                        <div class="w-6 h-6 bg-white/50 rounded-full flex items-center justify-center">
+                                            <i data-lucide="zap" class="w-3 h-3 text-indigo-400"></i>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-3 relative z-10">
+                                        <div class="w-full h-2.5 bg-indigo-500 rounded opacity-40"></div>
+                                        <div class="w-4/5 h-2.5 bg-indigo-500 rounded opacity-40"></div>
+                                        <div class="w-2/3 h-2.5 bg-indigo-500 rounded opacity-40"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Info -->
+                    <div class="px-2">
+                        <h3 class="text-2xl font-bold text-white mb-3 flex items-center gap-2">
+                            <i data-lucide="smartphone" class="w-6 h-6 text-indigo-500"></i> iOS & Android
+                        </h3>
+                        <p class="text-neutral-500 mb-6">Tradução instantânea no seu bolso. Perfeito para viagens e conversas rápidas.</p>
+                        
+                        <div class="space-y-3 mb-6">
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="wifi-off" class="w-4 h-4 text-indigo-400"></i></div>
+                                Modo Offline (12 idiomas)
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="lock" class="w-4 h-4 text-indigo-400"></i></div>
+                                Widget na Tela de Bloqueio
+                            </div>
+                             <div class="flex items-center gap-3 text-sm text-neutral-300">
+                                <div class="bg-indigo-500/10 p-1.5 rounded-full"><i data-lucide="vibrate" class="w-4 h-4 text-indigo-400"></i></div>
+                                Haptic Feedback
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-2 opacity-60">
+                            <span class="px-3 py-1 bg-white/5 rounded-md text-xs font-mono border border-white/10 flex items-center gap-1"><i data-lucide="apple" class="w-3 h-3"></i> iOS</span>
+                            <span class="px-3 py-1 bg-white/5 rounded-md text-xs font-mono border border-white/10 flex items-center gap-1"><i data-lucide="smartphone" class="w-3 h-3"></i> Android</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES BENTO GRID -->
+    <section id="features" class="py-32 px-6 bg-neutral-950">
+        <div class="max-w-7xl mx-auto">
+            <div class="reveal text-center">
+                <h2 class="text-4xl md:text-6xl font-bold tracking-tight mb-16">
+                    Poderoso. <span class="text-neutral-600">Em cada detalhe.</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- Tone Feature -->
+                <div class="reveal md:col-span-2 row-span-2 relative group overflow-hidden rounded-[2rem] bg-neutral-900 border border-white/5 p-8 md:p-12 h-[500px] flex flex-col justify-between">
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-[80px] group-hover:bg-indigo-500/20 transition-all duration-700"></div>
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 flex items-center justify-center mb-6 text-indigo-400">
+                            <i data-lucide="message-square" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-3xl font-bold mb-4">Ajuste de Tom Inteligente</h3>
+                        <p class="text-neutral-400 text-lg max-w-md">
+                            Não traduza apenas palavras. Traduza a intenção. Escolha entre tons Formais, Casuais ou Divertidos instantaneamente.
+                        </p>
+                    </div>
+                    <div class="mt-8 bg-black/40 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+                        <div class="flex justify-between items-center mb-4 text-sm text-neutral-500 uppercase tracking-widest font-bold">
+                            <span>Modo Atual</span>
+                            <span id="tone-display" class="text-indigo-400 transition-all duration-300">Formal</span>
+                        </div>
+                        <div id="tone-example" class="text-xl md:text-2xl text-white transition-opacity duration-500">
+                            Greetings, it is a pleasure to meet you.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Speed Feature -->
+                <div class="reveal delay-100 relative group overflow-hidden rounded-[2rem] bg-neutral-900 border border-white/5 p-8 h-[240px] flex flex-col justify-between">
+                    <i data-lucide="zap" class="w-8 h-8 text-yellow-400"></i>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Instantâneo</h3>
+                        <p class="text-neutral-400 text-sm">Tecnologia Debounce otimizada para tradução em tempo real sem latência.</p>
+                    </div>
+                </div>
+
+                <!-- Dark Mode Feature -->
+                <div class="reveal delay-200 relative group overflow-hidden rounded-[2rem] bg-neutral-900 border border-white/5 p-8 h-[240px] flex flex-col justify-between">
+                    <i data-lucide="moon" class="w-8 h-8 text-purple-400"></i>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Dark Mode Nativo</h3>
+                        <p class="text-neutral-400 text-sm">Conforto visual total com temas que se adaptam ao seu sistema.</p>
+                    </div>
+                </div>
+
+                <!-- Voice Feature -->
+                <div class="reveal delay-300 md:col-span-1 relative group overflow-hidden rounded-[2rem] bg-neutral-900 border border-white/5 p-8 h-[240px] flex flex-col justify-between">
+                    <i data-lucide="mic" class="w-8 h-8 text-red-400"></i>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Ditado por Voz</h3>
+                        <p class="text-neutral-400 text-sm">Fale naturalmente. O app ouve, transcreve e traduz.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LIST FEATURES -->
+    <section class="py-24 px-6 bg-black border-t border-white/5">
+        <div class="max-w-4xl mx-auto space-y-8">
+            <div class="reveal flex gap-4 items-start">
+                <div class="mt-1 bg-indigo-500/20 p-1 rounded-full"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i></div>
+                <div>
+                    <h4 class="text-xl font-bold text-white">Visualização Lado a Lado</h4>
+                    <p class="text-neutral-500">Compare original e tradução sem perder o contexto.</p>
+                </div>
+            </div>
+            <div class="reveal delay-100 flex gap-4 items-start">
+                <div class="mt-1 bg-indigo-500/20 p-1 rounded-full"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i></div>
+                <div>
+                    <h4 class="text-xl font-bold text-white">Gemini 2.5 AI Powered</h4>
+                    <p class="text-neutral-500">Utiliza o modelo mais recente do Google para precisão inigualável.</p>
+                </div>
+            </div>
+            <div class="reveal delay-200 flex gap-4 items-start">
+                <div class="mt-1 bg-indigo-500/20 p-1 rounded-full"><i data-lucide="check" class="w-4 h-4 text-indigo-400"></i></div>
+                <div>
+                    <h4 class="text-xl font-bold text-white">Exportação Visual</h4>
+                    <p class="text-neutral-500">Transforme suas traduções em cartões compartilháveis para redes sociais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <section class="py-32 px-6 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-indigo-900/10 blur-[100px] pointer-events-none"></div>
+        
+        <div class="reveal">
+            <h2 class="text-5xl md:text-7xl font-bold tracking-tighter mb-8">
+                Quebre o silêncio.
+            </h2>
+            <p class="text-xl text-neutral-400 mb-10">
+                Disponível para Web, iOS e Android.
+            </p>
+            <button class="bg-white text-black text-lg px-10 py-4 rounded-full font-bold hover:scale-105 transition-transform shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)]">
+                Baixar LiveTranslator 2.0
+            </button>
+        </div>
+
+        <footer class="mt-32 border-t border-white/10 pt-10 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-500 max-w-7xl mx-auto">
+            <div>
+                &copy; 2024 LiveTranslator Inc. Todos os direitos reservados.
+            </div>
+            <div class="flex gap-6 mt-4 md:mt-0">
+                <a href="#" class="hover:text-white">Privacidade</a>
+                <a href="#" class="hover:text-white">Termos</a>
+                <a href="#" class="hover:text-white">Suporte</a>
+            </div>
+        </footer>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Inicializa ícones Lucide
+        lucide.createIcons();
+
+        // Animação de Scroll (Intersection Observer)
+        document.addEventListener('DOMContentLoaded', () => {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            reveals.forEach(el => observer.observe(el));
+        });
+
+        // Typing Effect (Live Demo)
+        const fullText = "O LiveTranslator traduz enquanto você digita.";
+        const targetText = "LiveTranslator translates as you type.";
+        const inputEl = document.getElementById('demo-input');
+        const outputEl = document.getElementById('demo-output');
+        
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            if (isDeleting) {
+                // Deletando
+                charIndex--;
+                inputEl.textContent = fullText.substring(0, charIndex);
+                // Simula tradução sumindo
+                const ratio = targetText.length / fullText.length;
+                outputEl.textContent = targetText.substring(0, Math.floor(charIndex * ratio));
+            } else {
+                // Escrevendo
+                charIndex++;
+                inputEl.textContent = fullText.substring(0, charIndex);
+                // Simula tradução aparecendo
+                const ratio = targetText.length / fullText.length;
+                outputEl.textContent = targetText.substring(0, Math.floor(charIndex * ratio));
+            }
+
+            // Controle de velocidade
+            let typeSpeed = isDeleting ? 30 : 100;
+
+            if (!isDeleting && charIndex === fullText.length) {
+                typeSpeed = 3000; // Pausa no final
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                typeSpeed = 500; // Pausa antes de recomeçar
+            }
+
+            setTimeout(typeEffect, typeSpeed);
+        }
+        
+        // Inicia digitação após 1s
+        setTimeout(typeEffect, 1000);
+
+
+        // Tone Switcher (Ajuste de Tom)
+        const toneDisplay = document.getElementById('tone-display');
+        const toneExample = document.getElementById('tone-example');
+        const tones = [
+            { name: 'Formal', text: 'Greetings, it is a pleasure to meet you.' },
+            { name: 'Casual', text: 'Hey! Awesome to meet you!' },
+            { name: 'Divertido', text: 'Hello there! Finally meeting the legend!' },
+            { name: 'Resumido', text: 'Nice to meet you.' }
+        ];
+        
+        let toneIndex = 0;
+
+        setInterval(() => {
+            toneIndex = (toneIndex + 1) % tones.length;
+            const current = tones[toneIndex];
+            
+            // Fade out
+            toneExample.style.opacity = 0;
+            toneDisplay.style.opacity = 0;
+            
+            setTimeout(() => {
+                toneDisplay.textContent = current.name;
+                toneExample.textContent = current.text;
+                // Fade in
+                toneExample.style.opacity = 1;
+                toneDisplay.style.opacity = 1;
+            }, 300); // Metade do tempo da transição CSS para suavidade
+            
+        }, 3000);
+    </script>
+</body>
+</html>
